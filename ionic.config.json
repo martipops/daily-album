@@ -1,0 +1,8 @@
+{
+  "name": "Daily Album",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite",
+  "id": "fa9195f9"
+}
