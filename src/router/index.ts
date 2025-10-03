@@ -8,6 +8,10 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/tabs/tab1'
   },
   {
+    path: '/callback',
+    component: () => import('../views/CallbackPage.vue')
+  },
+  {
     path: '/tabs/',
     component: TabsPage,
     children: [
