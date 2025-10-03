@@ -24,5 +24,4 @@
 
 <script setup lang="ts">
 import { IonTabBar, IonTabButton, IonTabs, IonLabel, IonPage, IonRouterOutlet } from '@ionic/vue';
-import { disc, star, person } from 'ionicons/icons';
 </script>
