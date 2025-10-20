@@ -8,14 +8,14 @@
         </div>
         
         <div v-else-if="error">
-          <ion-icon :icon="alertCircle" color="danger" size="large"></ion-icon>
+          <ion-icon :icon="$icons.alertCircle" color="danger" size="large"></ion-icon>
           <h2>Authentication failed</h2>
           <p>{{ error }}</p>
           <ion-button @click="retry">Try Again</ion-button>
         </div>
         
         <div v-else>
-          <ion-icon :icon="checkmarkCircle" color="success" size="large"></ion-icon>
+          <ion-icon :icon="$icons.checkmarkCircle" color="success" size="large"></ion-icon>
           <h2>Authentication successful!</h2>
           <p>Redirecting to app...</p>
         </div>
@@ -32,7 +32,6 @@ import {
   IonButton, 
   IonIcon 
 } from '@ionic/vue';
-import { alertCircle, checkmarkCircle } from 'ionicons/icons';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -51,14 +50,11 @@ export default {
     return {
       loading: true,
       error: null as string | null,
-      alertCircle,
-      checkmarkCircle
     }
   },
   methods: {
     async handleCallback() {
       try {
-        // Get the authorization code from URL
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
         const error = urlParams.get('error');
@@ -71,10 +67,6 @@ export default {
           throw new Error('No authorization code received');
         }
         
-        // Store the code and redirect to main app
-        localStorage.setItem('spotify_auth_code', code);
-        
-        // Give user feedback then redirect
         this.loading = false;
         setTimeout(() => {
           this.router.push('/tabs/tab1');
@@ -87,7 +79,6 @@ export default {
     },
     
     retry() {
-      // Clear any stored data and go back to main app to retry auth
       localStorage.removeItem('spotify_auth_code');
       localStorage.removeItem('verifier');
       this.router.push('/');
