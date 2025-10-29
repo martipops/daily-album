@@ -29,8 +29,7 @@ import {
   IonPage, 
   IonContent, 
   IonSpinner, 
-  IonButton, 
-  IonIcon 
+  IonButton
 } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 
@@ -39,8 +38,7 @@ export default {
     IonPage,
     IonContent,
     IonSpinner,
-    IonButton,
-    IonIcon
+    IonButton
   },
   setup() {
     const router = useRouter();

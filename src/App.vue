@@ -26,21 +26,10 @@ export default {
   methods: {
     async getAccessToken(clientId: string, code: string){
       const verifier = localStorage.getItem("verifier") as string;
-      const url = 'https://accounts.spotify.com/api/token';
       const params = new URLSearchParams();
 
-      params.append("grant_type", "authorization_code");
-      params.append("code", code);
-      params.append("redirect_uri", "https://127.0.0.1:3000/callback");
-      params.append("client_id", clientId);
-      params.append("code_verifier", verifier);
-
-      const response = await fetch(url, {
-        method: "POST",
-        body: params.toString(),
-      })
-
-      const data = await response.json();
+      // STILL NEEDS TO BE FINISHED
+      // params.append
     },
     async fetchUserProfile(token: string): Promise<any> {
 
@@ -81,34 +70,30 @@ export default {
           .replace(/\//g, '_')
           .replace(/=+$/, '');
     },
-    logInAction(){
-      this.redirectToAuthCodeFlow(this.CLIENT_ID);
-    },
   },
   async mounted() {
     this.CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID || '';
     this.CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET || '';
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
     
     if (!this.CLIENT_ID) {
       console.error('CLIENT_ID is still not defined! Environment variables not loading properly');
       return;
     }
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
     if (code) {
       await Preferences.set({ key: 'spotify_code', value: code });
       this.code = code;
-      this.getAccessToken(this.CLIENT_ID, this.code);
     } else {
       const stored = await Preferences.get({ key: 'spotify_code' });
       this.code = stored.value;
     }
     
-    if (!this.code) {
-      this.redirectToAuthCodeFlow(this.CLIENT_ID);
-    } else {
-      console.log(this.code);
-    }
+    // if (!this.code) {
+    //   this.redirectToAuthCodeFlow(this.CLIENT_ID);
+    // } else {
+    //   console.log(this.code);
+    // }
   }
 }
 </script>

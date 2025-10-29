@@ -20,6 +20,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@Icons': path.resolve(__dirname, './resources/icons'),
+      '@Components': path.resolve(__dirname, './src/components'),
+      '@Pages': path.resolve(__dirname, './src/views'),
+      '@Composables': path.resolve(__dirname, '.src/composables'),
     },
   },
   test: {

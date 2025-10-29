@@ -12,8 +12,13 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "noEmit": true,
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"],
+      "@Icons/*": ["resources/icons/*"],
+      "@Components/*": ["src/components/*"],
+      "@Pages/*": ["src/views/*"],
+      "@Composables/*": ["src/composables/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

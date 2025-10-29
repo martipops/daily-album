@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
 
-import { IonicVue } from '@ionic/vue';
+import { IonicVue, IonIcon } from '@ionic/vue';
 import * as icons from 'ionicons/icons'
 
 /* Core CSS required for Ionic components to work properly */
@@ -38,6 +38,8 @@ import './theme/variables.css';
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
+
+app.component('ion-icon', IonIcon)
 
 app.config.globalProperties.$icons = icons
 
