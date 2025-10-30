@@ -1,10 +1,12 @@
+import { Preferences } from '@capacitor/preferences';
+
 export function useSpotifyApi() {
   const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID as string;
   const CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET as string;
-  const code = "" as string | null;
+  let code = "" as string | null;
   const token = "" as string;
   let verifier = "" as string;
-  const loading = true;
+  let loading = true;
 
   async function redirectToAuthCodeFlow(client_id: string) {
     verifier = await generateCodeVerifier(128);
@@ -52,5 +54,19 @@ export function useSpotifyApi() {
     }
     async function populateUI(profile: any){
 
+    }
+    async function init(){
+    const params = new URLSearchParams(window.location.search)
+    const urlCode = params.get('code')
+
+    if (urlCode) {
+      await Preferences.set({ key: 'spotify_code', value: urlCode })
+      code = urlCode
+    } else {
+      const stored = await Preferences.get({ key: 'spotify_code' })
+      code = stored.value
+    }
+
+    loading = false
     }
 }
