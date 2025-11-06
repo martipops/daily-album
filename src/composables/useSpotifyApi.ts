@@ -1,10 +1,10 @@
-import { Preferences } from '@capacitor/preferences';
+import { Preferences } from "@capacitor/preferences";
 
 export function useSpotifyApi() {
   const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID as string;
   const CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET as string;
   let code = "" as string | null;
-  const token = "" as string;
+  let token = "" as string;
   let verifier = "" as string;
   let loading = true;
 
@@ -24,6 +24,7 @@ export function useSpotifyApi() {
 
     window.location.href = `https://accounts.spotify.com/authorize?${params.toString()}`;
   }
+
   async function generateCodeVerifier(length: number) {
     let text = "";
     let possible =
@@ -34,6 +35,7 @@ export function useSpotifyApi() {
     }
     return text;
   }
+
   async function generateCodeChallenge(verifier: string) {
     const data = new TextEncoder().encode(verifier);
     const digest = await window.crypto.subtle.digest("SHA-256", data);
@@ -42,31 +44,51 @@ export function useSpotifyApi() {
       .replace(/\//g, "_")
       .replace(/=+$/, "");
   }
-  async function getAccessToken(clientId: string, code: string){
-      const verifier = localStorage.getItem("verifier") as string;
-      const params = new URLSearchParams();
 
-      // STILL NEEDS TO BE FINISHED
-      // params.append
-    }
-    async function fetchUserProfile(token: string): Promise<any> {
+  async function getAccessToken(clientId: string, code: string) {
+    const verifier = localStorage.getItem("verifier");
 
-    }
-    async function populateUI(profile: any){
+    const params = new URLSearchParams();
+    params.append("client_id", clientId);
+    params.append("grant_type", "authorization_code");
+    params.append("code", code);
+    params.append("redirect_uri", "http://127.0.0.1:5173/callback");
+    params.append("code_verifier", verifier!);
 
-    }
-    async function init(){
-    const params = new URLSearchParams(window.location.search)
-    const urlCode = params.get('code')
+    const result = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params
+    });
+
+    const { access_token } = await result.json();
+    return access_token;
+  }
+
+  async function fetchUserProfile(token: string): Promise<any> {
+
+  }
+  async function populateUI(profile: any) {
+
+  }
+
+  async function init() {
+    const params = new URLSearchParams(window.location.search);
+    const urlCode = params.get("code");
 
     if (urlCode) {
-      await Preferences.set({ key: 'spotify_code', value: urlCode })
-      code = urlCode
+      await Preferences.set({ key: "spotify_code", value: urlCode });
+      code = urlCode;
     } else {
-      const stored = await Preferences.get({ key: 'spotify_code' })
-      code = stored.value
+      const stored = await Preferences.get({ key: "spotify_code" });
+      code = stored.value;
     }
 
-    loading = false
-    }
+    loading = false;
+  }
+
+  return {
+    redirectToAuthCodeFlow,
+    CLIENT_ID,
+  };
 }

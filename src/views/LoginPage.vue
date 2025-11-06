@@ -7,7 +7,7 @@
         <ion-icon :icon="DailyAlbumIcon"></ion-icon>
           <h1>Welcome to Daily Album!</h1>
           <p>Login with Spotify to get started.</p>
-          <ion-button expand="block" color="success" class="ion-margin-top" @click="">
+          <ion-button expand="block" color="success" class="ion-margin-top" @click="spotifyApi.redirectToAuthCodeFlow(spotifyApi.CLIENT_ID)">
             Login with Spotify
           </ion-button>
         </div>
