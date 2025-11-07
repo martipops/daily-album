@@ -2,16 +2,16 @@
   <ion-page>
     <ion-content class="callback-content">
       <div class="callback-container">
-        <div v-if="loading">
+        <div v-if="spotifyApi.loading">
           <ion-spinner></ion-spinner>
           <h2>Processing authentication...</h2>
         </div>
         
-        <div v-else-if="error">
+        <div v-else-if="spotifyApi.error">
           <ion-icon :icon="$icons.alertCircle" color="danger" size="large"></ion-icon>
           <h2>Authentication failed</h2>
-          <p>{{ error }}</p>
-          <ion-button @click="retry">Try Again</ion-button>
+          <p>{{ spotifyApi.error }}</p>
+          <ion-button @click="spotifyApi.retry">Try Again</ion-button>
         </div>
         
         <div v-else>
@@ -31,60 +31,21 @@ import {
   IonSpinner, 
   IonButton
 } from '@ionic/vue';
-import { useRouter } from 'vue-router';
+import { useSpotifyApi } from '@/composables/useSpotifyApi';
 
 export default {
   components: {
     IonPage,
     IonContent,
     IonSpinner,
-    IonButton
+    IonButton,
   },
   setup() {
-    const router = useRouter();
-    return { router };
+    const spotifyApi = useSpotifyApi();
+    return { spotifyApi };
   },
-  data() {
-    return {
-      loading: true,
-      error: null as string | null,
-    }
-  },
-  methods: {
-    async handleCallback() {
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        const error = urlParams.get('error');
-        
-        if (error) {
-          throw new Error(`Authorization failed: ${error}`);
-        }
-        
-        if (!code) {
-          throw new Error('No authorization code received');
-        }
-        
-        this.loading = false;
-        setTimeout(() => {
-          this.router.push('/tabs/tab1');
-        }, 2000);
-        
-      } catch (err) {
-        this.loading = false;
-        this.error = err instanceof Error ? err.message : 'Unknown error occurred';
-      }
-    },
-    
-    retry() {
-      localStorage.removeItem('spotify_auth_code');
-      localStorage.removeItem('verifier');
-      this.router.push('/');
-    }
-  },
-  
   mounted() {
-    this.handleCallback();
+    this.spotifyApi.handleRedirectCallBack();
   }
 }
 </script>
