@@ -52,9 +52,8 @@ export function useSpotifyApi() {
       const token = await getAccessToken(CLIENT_ID, code);
       loading = false;
       setTimeout(() => {
-        router.push('/tabs/tab1');
+        router.push('/tabs/tab2');
       }, 2000);
-      console.log("TOKEN:", token);
     } catch (err) {
       retry(router);
       loading = false;
@@ -112,6 +111,7 @@ export function useSpotifyApi() {
     }
 
     const { access_token } = await result.json();
+    localStorage.setItem('token', access_token )
     return access_token;
   }
 
