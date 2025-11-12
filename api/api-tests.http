@@ -1,0 +1,22 @@
+### Daily Album Backend API Tests
+
+# Health Check Endpoint
+GET http://localhost:2121/health
+
+###
+
+# Database Connection Test
+GET http://localhost:2121/api/test-db
+
+###
+
+# Example POST request (for future endpoints)
+# POST http://localhost:2121/api/users
+# Content-Type: application/json
+
+# {
+#   "name": "John Doe",
+#   "email": "john@example.com"
+# }
+
+###
