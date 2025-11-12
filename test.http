@@ -1,0 +1,14 @@
+### Create a new token
+POST http://localhost:2121/token/create
+Content-Type: application/json
+
+{
+  "id": 1,
+  "userId": "abc123-spotifyid",
+  "refreshToken": "some-refresh-token",
+  "expiresAt": "2025-12-01T12:00:00.000Z",
+  "revoked": false,
+  "ipAddress": "192.168.1.1",
+  "userAgent": "Mozilla/5.0",
+  "createdAt": "2025-11-12T08:00:00.000Z"
+}

@@ -1,4 +1,4 @@
-import express from "express";
+import prisma from "../prisma/client.js";
+import type { Token } from "../interfaces/token_interface.js";
 
-const router = express.Router();
-
+export const createToken = (data: Token) => prisma.token.create({ data });
