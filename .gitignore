@@ -1,2 +1,27 @@
+# Environment files
 *.env
 .env.local
+
+# Dependencies - ignore ALL node_modules directories
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Prisma
+.env
+prisma/migrations/
+.prisma/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
