@@ -1,7 +1,8 @@
 import express from 'express';
 import type { Request, Response } from 'express';
-import prisma from './prismaClient.js';
+import { PrismaClient } from '@prisma/client';
 
+const prisma = new PrismaClient()
 const app = express();
 const PORT = 2121;
 

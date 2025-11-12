@@ -14,20 +14,28 @@ datasource db {
 }
 
 model User {
-  id              String      @id @default(uuid())
-  spotify_id      String      @unique
-  username        String      @unique
-  email           String      @unique
-  avatar_url      String?
-  created_at      DateTime     @default(now())
-  updated_at      DateTime     @updatedAt
-  token           Tokens?
+  id          String   @id @default(uuid())
+  spotify_id  String   @unique
+  username    String   @unique
+  email       String   @unique
+  avatar_url  String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  tokens      Token[]
 }
 
-model Tokens {
- user_id          String      @unique
- user             User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
- token            String
+model Token {
+  id           Int      @id @default(autoincrement())
+  userId       String
+  refreshToken String   @unique
+  expiresAt    DateTime
+  revoked      Boolean  @default(false)
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id])
 }
 
 // model Ratings {
