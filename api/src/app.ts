@@ -13,6 +13,6 @@ app.get("/", (req, res) => {
     res.json({ message: "API up and running!"})
 });
 
-app.use("/token/create", tokenRouter);
+app.use("/api", tokenRouter);
 
 export default app;
