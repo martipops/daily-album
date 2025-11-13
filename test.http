@@ -1,5 +1,5 @@
 ### Create a new token
-POST http://localhost:2121/token/create
+POST http://localhost:2121/api/token/create
 Content-Type: application/json
 
 {
