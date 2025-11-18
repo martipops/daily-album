@@ -9,12 +9,13 @@ const app = express();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
     res.json({ message: "API up and running!"})
 });
 
-app.get("/api", spotifyRouter);
+app.use("/api", spotifyRouter);
 
 app.use("/api", tokenRouter);
 

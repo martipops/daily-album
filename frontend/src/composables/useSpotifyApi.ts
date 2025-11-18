@@ -42,6 +42,7 @@ export function useSpotifyApi() {
         throw new Error("No authorization code received");
       }
       const token = await getAccessToken(CLIENT_ID, code);
+      console.log(token);
       loading = false;
       setTimeout(() => {
         router.push("/tabs/tab2");
