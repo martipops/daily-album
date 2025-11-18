@@ -19,11 +19,15 @@ export const getAccessToken = async (clientId: string, accessCode: string, verif
     params.append("redirect_uri", "https://127.0.0.1:3000/callback");
     params.append("code_verifier", verifier!);
 
-    const result = await fetch("http://localhost:2121/api/spotify/refresh", {
+    const response = await fetch("http://localhost:2121/api/spotify/refresh", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: params
     });
 
-    return result as Response;
+    if (!response.ok) {
+        throw new Error(`Backend error: ${response.status}`);
+    }
+    
+    return response; 
 }   

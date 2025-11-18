@@ -3,9 +3,8 @@ import * as spotifyApi from "../services/spotify-api";
 
 export function useSpotifyApi() {
   const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID as string;
-  const CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET as string;
   let code = "" as string | null;
-  let token = "" as string;
+  let token = "" as string | null;
   let verifier = "" as string;
   let loading = true;
   let error: string | null = null;
@@ -41,15 +40,18 @@ export function useSpotifyApi() {
         loading = false;
         throw new Error("No authorization code received");
       }
-      const token = await getAccessToken(CLIENT_ID, code);
-      console.log(token);
+
+      token = await getAccessToken(CLIENT_ID, code);
       loading = false;
+
       setTimeout(() => {
         router.push("/tabs/tab2");
       }, 2000);
+
     } catch (err) {
       retry(router);
       loading = false;
+      console.error(err);
       error = err instanceof Error ? err.message : "Unknown error occurred";
     }
     return code as string;
@@ -81,7 +83,7 @@ export function useSpotifyApi() {
       .replace(/=+$/, "");
   }
 
-  async function getAccessToken(clientId: string,code: string): Promise<string> {
+  async function getAccessToken(clientId: string, code: string): Promise<string | null> {
     const verifier = localStorage.getItem("verifier");
     const result = await spotifyApi.getAccessToken(
       clientId,
@@ -97,7 +99,9 @@ export function useSpotifyApi() {
 
     const { access_token } = await result.json();
     localStorage.setItem("token", access_token);
-    return access_token;
+    const token = localStorage.getItem("token");
+
+    return token;
   }
 
   async function fetchUserProfile(token: string): Promise<any> {}

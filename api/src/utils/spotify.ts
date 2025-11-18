@@ -12,7 +12,9 @@ export const getRefreshToken = async (clientId: string, accessCode: string, veri
       body: params
     });
 
-    if (!res.ok) throw new Error(`Spotify token request failed: ${res.status}`);
+    if (!res.ok){
+       throw new Error(`Spotify token request failed: ${res.status}`);
+    }
     
     return res.json();
 } 
