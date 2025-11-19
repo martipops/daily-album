@@ -1,5 +1,6 @@
 import { Router, useRouter } from "vue-router";
-import * as spotifyApi from "../services/spotify-api";
+import * as SpotifyApi from "../services/spotify-api";
+import { Storage } from "../services/storage";
 
 export function useSpotifyApi() {
   const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID as string;
@@ -13,20 +14,21 @@ export function useSpotifyApi() {
     verifier = await generateCodeVerifier(128);
     const challenge = await generateCodeChallenge(verifier);
 
-    localStorage.setItem("verifier", verifier);
+    await Storage.set('verifier', verifier)
 
-    spotifyApi.authFlow(CLIENT_ID, challenge);
+    SpotifyApi.authFlow(CLIENT_ID, challenge);
   }
 
   async function handleRedirectCallBack(): Promise<string> {
     const router = useRouter();
     const response = new URLSearchParams(window.location.search);
     code = response.get("code");
-    localStorage.setItem("code", code as string);
+
+    await Storage.set('code', code as string);
 
     try {
       const urlParams = new URLSearchParams(window.location.search);
-      const code = localStorage.getItem("code");
+      const code = await Storage.get('code');
       const authError = urlParams.get("error");
 
       if (authError) {
@@ -58,8 +60,8 @@ export function useSpotifyApi() {
   }
 
   function retry(router: Router) {
-    localStorage.removeItem("spotify_auth_code");
-    localStorage.removeItem("verifier");
+    Storage.remove('code');
+    Storage.remove('verifier');
     router.push("/");
   }
 
@@ -84,8 +86,8 @@ export function useSpotifyApi() {
   }
 
   async function getAccessToken(clientId: string, code: string): Promise<string | null> {
-    const verifier = localStorage.getItem("verifier");
-    const result = await spotifyApi.getAccessToken(
+    const verifier = await Storage.get('verifier');
+    const result = await SpotifyApi.getAccessToken(
       clientId,
       code,
       verifier as string
@@ -98,10 +100,10 @@ export function useSpotifyApi() {
     }
 
     const { access_token } = await result.json();
-    localStorage.setItem("token", access_token);
-    const token = localStorage.getItem("token");
+    await Storage.set('token', access_token);
+    const token = await Storage.get('token');
 
-    return token;
+    return token as string;
   }
 
   async function fetchUserProfile(token: string): Promise<any> {}
